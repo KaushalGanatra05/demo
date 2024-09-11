@@ -1,0 +1,42 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: robusta-helmrelease
+  namespace: robusta
+spec:
+  chart:
+    spec:
+      chart: robusta
+      reconcileStrategy: ChartVersion
+      version: 0.12.0
+      sourceRef:
+        kind: HelmRepository
+        name: robusta-helm-source
+        namespace: flux-system
+  interval: 9m0s
+  values:
+    clusterName: loading 2
+    globalConfig:
+    signing_key: 
+    account_id: ee4092d8-742e-4ce8-9b92-fca7dc91f98f
+    sinksConfig:
+    - robusta_sink:
+        name: robusta_ui_sink
+        token: eyJhY2NvdW50X2lkIjoiZWU0MDkyZDgtNzQyZS00Y2U4LTliOTItZmNhN2RjOTFmOThmIiwiZW1haWwiOiJrYXVzaGFsLmdhbmF0cmFAaW1wcm93aXNlZC5jb20iLCJwYXNzd29yZCI6IiJ9
+    - webhook_sink:
+        name: webhook_sink
+        url: http://127.0.0.1:3000/api/v1/cronjob/webhook
+        format: "json"
+        size_limit: 999999
+    customPlaybooks:
+    - actions:
+        - list_cronjobs_schedule: {}
+        triggers:
+        - on_job_all_changes: {}
+        sinks:
+        - "webhook_sink"
+    playbookRepos:
+    my_extra_playbook:
+        url: https://github.com/chintansakhiya/robusta-playbook.git
+        key: 
+    disableCloudRouting: false
