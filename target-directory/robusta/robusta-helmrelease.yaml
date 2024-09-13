@@ -15,7 +15,7 @@ spec:
         namespace: flux-system
   interval: 9m0s
   values:
-    clusterName: repo name change 7
+    clusterName: repo name change 9
     globalConfig:
     signing_key: 
     account_id: ee4092d8-742e-4ce8-9b92-fca7dc91f98f
